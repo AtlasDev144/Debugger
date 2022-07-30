@@ -41,14 +41,7 @@ public abstract class Debugger {
      */
     public void finish(final String sectionName) {
         this.section(sectionName).ifPresent(Section::finish);
-        if(this.activeSections.remove(sectionName) != null) {
-            //Adjust indentation 1 to the left since active sections decreased
-            this.activeSections.forEach((name, section) -> {
-                if(section.indentation > 0) {
-                    section.indentation--;
-                }
-            });
-        }
+        this.activeSections.remove(sectionName);
     }
 
     /**
@@ -63,13 +56,11 @@ public abstract class Debugger {
      * Allows easy segmenting and organization of multiple tasks that are currently being debugged.
      */
     public class Section {
-        private int indentation;
         private final String name;
         private final DividerType dividerType;
         private final Logger logger;
 
         public Section(final int indentation, final String name, final DividerType dividerType) {
-            this.indentation = indentation;
             this.name = name;
             this.dividerType = dividerType;
             this.logger = Debugger.this.logger;
