@@ -7,8 +7,10 @@ import java.util.logging.Logger;
 
 public abstract class Debugger {
     private final Map<String, Section> activeSections;
+    protected final Logger logger;
 
-    protected Debugger() {
+    protected Debugger(final Logger logger) {
+        this.logger = logger;
         this.activeSections = new HashMap<>();
     }
 
@@ -60,7 +62,7 @@ public abstract class Debugger {
     /**
      * Allows easy segmenting and organization of multiple tasks that are currently being debugged.
      */
-    public static class Section {
+    public class Section {
         private int indentation;
         private final String name;
         private final DividerType dividerType;
@@ -70,14 +72,14 @@ public abstract class Debugger {
             this.indentation = indentation;
             this.name = name;
             this.dividerType = dividerType;
-            this.logger = Logger.getLogger(name);
+            this.logger = Debugger.this.logger;
 
             this.log(this.dividerType.divider);
-            this.log("Debugger Section beginning: " + this.name);
+            this.log("Debugger Section beginning");
         }
 
         protected void finish() {
-            this.log("Debugger Section complete: " + this.name);
+            this.log("Debugger Section complete");
             this.log(this.dividerType.divider);
         }
 
@@ -87,7 +89,7 @@ public abstract class Debugger {
          * @return
          */
         public Section log(final String message) {
-            this.logger.fine(message);
+            this.logger.fine("[" + this.name + "] " + message);
             return this;
         }
 
@@ -97,7 +99,7 @@ public abstract class Debugger {
          * @return
          */
         public Section warning(final String message) {
-            this.logger.warning(message);
+            this.logger.warning("[" + this.name + "] " + message);
             return this;
         }
 
@@ -107,7 +109,7 @@ public abstract class Debugger {
          * @return
          */
         public Section error(final String message) {
-            this.logger.severe(message);
+            this.logger.severe("[" + this.name + "] " + message);
             return this;
         }
 
