@@ -20,7 +20,7 @@ public abstract class Debugger {
      * @param dividerType
      * @return
      */
-    public Section create(final String name, final Section.DividerType dividerType) {
+    public Section create(final String name, final DividerType dividerType) {
         final Section result = new Section(this.activeSections.size(), name, dividerType);
         this.activeSections.put(name, result);
         return result;
@@ -112,18 +112,18 @@ public abstract class Debugger {
             this.logger.severe("[" + this.name + "] " + message);
             return this;
         }
+    }
 
-        public enum DividerType {
-            THICK("========================================"),
-            THIN("----------------------------------------"),
-            UNDERSCORE("________________________________________"),
-            STAR("****************************************");
+    public enum DividerType {
+        THICK("========================================"),
+        THIN("----------------------------------------"),
+        UNDERSCORE("________________________________________"),
+        STAR("****************************************");
 
-            private final String divider;
+        private final String divider;
 
-            DividerType(String div) { this.divider = div; }
+        DividerType(String div) { this.divider = div; }
 
-            public String divider() { return this.divider; }
-        }
+        public String divider() { return this.divider; }
     }
 }
