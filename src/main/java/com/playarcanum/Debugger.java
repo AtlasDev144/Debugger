@@ -89,7 +89,7 @@ public abstract class Debugger {
          * @return
          */
         public Section log(final String message) {
-            this.logger.fine("[" + this.name + "] " + message);
+            this.logger.info("[" + this.name + "] " + message);
             return this;
         }
 
