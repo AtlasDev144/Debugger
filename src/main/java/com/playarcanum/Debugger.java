@@ -3,14 +3,32 @@ package com.playarcanum;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-public abstract class Debugger {
-    private final Map<String, Section> activeSections;
+public abstract class Debugger<Logger> {
+    protected final Map<String, Section> activeSections;
     protected final Logger logger;
 
-    protected Debugger(final Logger logger) {
+    protected final Consumer<String> debug;
+    protected final Consumer<String> warning;
+    protected final Consumer<String> error;
+
+    /**
+     * The constructor for a {@link Debugger}.
+     * @param logger The logger instance to use
+     * @param debug The logger's method to use for debug-level messages
+     * @param warning The logger's method to use for warning-level messages
+     * @param error The logger's method to use for error-level messages
+     */
+    protected Debugger(final Logger logger,
+                       final Consumer<String> debug,
+                       final Consumer<String> warning,
+                       final Consumer<String> error) {
         this.logger = logger;
+        this.debug = debug;
+        this.warning = warning;
+        this.error = error;
         this.activeSections = new HashMap<>();
     }
 
@@ -65,13 +83,13 @@ public abstract class Debugger {
             this.dividerType = dividerType;
             this.logger = Debugger.this.logger;
 
-            this.log(this.dividerType.divider);
-            this.log("Debugger Section beginning");
+            this.debug(this.dividerType.divider);
+            this.debug("Debugger Section beginning");
         }
 
         protected void finish() {
-            this.log("Debugger Section complete");
-            this.log(this.dividerType.divider);
+            this.debug("Debugger Section complete");
+            this.debug(this.dividerType.divider);
         }
 
         /**
@@ -79,8 +97,8 @@ public abstract class Debugger {
          * @param message
          * @return
          */
-        public Section log(final String message) {
-            this.logger.info("[" + this.name + "] " + message);
+        public Section debug(final String message) {
+            Debugger.this.debug.accept("[" + this.name + "] " + message);
             return this;
         }
 
@@ -90,7 +108,7 @@ public abstract class Debugger {
          * @return
          */
         public Section warning(final String message) {
-            this.logger.warning("[" + this.name + "] " + message);
+            Debugger.this.warning.accept("[" + this.name + "] " + message);
             return this;
         }
 
@@ -100,7 +118,7 @@ public abstract class Debugger {
          * @return
          */
         public Section error(final String message) {
-            this.logger.severe("[" + this.name + "] " + message);
+            Debugger.this.error.accept("[" + this.name + "] " + message);
             return this;
         }
     }
