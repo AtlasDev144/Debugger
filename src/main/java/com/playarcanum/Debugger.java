@@ -108,11 +108,9 @@ public abstract class Debugger<Logger> {
             this.logger = Debugger.this.logger;
 
             this.info(this.dividerType.divider);
-            this.info("Debugger Section beginning");
         }
 
         protected void finish() {
-            this.info("Debugger Section complete");
             this.info(this.dividerType.divider);
         }
 
@@ -151,7 +149,8 @@ public abstract class Debugger<Logger> {
         THICK("========================================"),
         THIN("----------------------------------------"),
         UNDERSCORE("________________________________________"),
-        STAR("****************************************");
+        STAR("****************************************"),
+        BLANK(" ");
 
         private final String divider;
 
