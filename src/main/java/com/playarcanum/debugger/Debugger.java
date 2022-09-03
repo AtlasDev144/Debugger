@@ -1,4 +1,4 @@
-package com.playarcanum;
+package com.playarcanum.debugger;
 
 import java.util.HashMap;
 import java.util.Map;
